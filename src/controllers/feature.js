@@ -1,11 +1,12 @@
 const compose = require('koa-compose')
+const logger = require('../common/logger')
 
 module.exports = {
   getOne: compose([
     async ctx => {
 
       ctx.status = 200
-      ctx.body = industry
+      ctx.body = {}
     },
   ]),
 
@@ -20,7 +21,7 @@ module.exports = {
     async ctx => {
       const body = ctx.request.body
 
-      console.log(body)
+      logger.info({ body })
 
       ctx.status = 200
       ctx.body = {}
