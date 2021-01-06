@@ -1,0 +1,40 @@
+{
+  "name": "funky-api",
+  "version": "1.0.0",
+  "description": "PB Funky API",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js"
+  },
+  "keywords": [
+    "api"
+  ],
+  "license": "ISC",
+  "engines": {
+    "node": "12.16.1",
+    "npm": "6.13.4"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "axios": "^0.19.0",
+    "babel-eslint": "^8.2.6",
+    "bluebird": "^3.5.3",
+    "bunyan": "^1.8.14",
+    "dotenv": "^4.0.0",
+    "eslint": "^4.19.1",
+    "kcors": "^2.2.2",
+    "koa": "^2.6.2",
+    "koa-body": "^2.6.0",
+    "koa-compose": "^4.1.0",
+    "koa-compress": "^2.0.0",
+    "koa-router": "^7.4.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
+    "nodemon": "^1.19.4"
+  }
+}
