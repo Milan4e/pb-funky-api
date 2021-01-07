@@ -6,7 +6,8 @@ const router = new Router({ prefix: '/api/feature' })
 router.get('/', controllers.feature.getAll)
 router.post('/', controllers.feature.create)
 router.post('/boards', controllers.feature.createBoard)
-router.post('/boards/:id/widget', controllers.feature.createWidget)
+router.post('/boards/:id/widgets', controllers.feature.createWidget)
+router.get('/boards/:id/widgets', controllers.feature.getAllWidgets)
 router.get('/boards', controllers.feature.getBoards)
 
 module.exports = router

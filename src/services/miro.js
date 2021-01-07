@@ -27,5 +27,11 @@ module.exports = {
     const createdWidget = await axios.default.post(`${baseUrl}/boards/${boardId}/widgets?access_token=${miroToken}`, widget)
 
     return createdWidget
+  },
+
+  getAllWidgets: async (boardId) => {
+    const { data } = await axios.default.get(`${baseUrl}/boards/${boardId}/widgets?access_token=${miroToken}`)
+
+    return data
   }
 }

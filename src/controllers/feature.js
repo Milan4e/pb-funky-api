@@ -36,6 +36,10 @@ module.exports = {
       //   }
 
       const body = ctx.request.body
+
+      body.x = Math.random() * 500
+      body.y = Math.random() * 500
+
       const { data } = await miro.createWidget(boardId, { type: 'card', title: body.data.name })
 
       logger.info({ body })
@@ -90,6 +94,9 @@ module.exports = {
       const body = ctx.request.body
       const boardId = ctx.params.id
 
+      body.x = Math.random() * 500
+      body.y = Math.random() * 500
+
       let widget
 
       try {
@@ -104,6 +111,27 @@ module.exports = {
 
       ctx.status = 200
       ctx.body = widget
+    },
+  ]),
+
+  getAllWidgets: compose([
+    async ctx => {
+      const boardId = ctx.params.id
+
+      let widgets
+
+      try {
+        const { data } = await miro.getAllWidgets(boardId)
+
+        widgets = data
+      } catch (err) {
+        ctx.status = err.response.status
+        ctx.body = err.response.data
+        return
+      }
+
+      ctx.status = 200
+      ctx.body = widgets
     },
   ]),
 }
