@@ -3,6 +3,10 @@ const logger = require('../common/logger')
 const miro = require('../services/miro')
 const errors = require('../common/errors')
 
+function randomPosition() {
+    return Math.random() * 500
+}
+
 module.exports = {
   getOne: compose([
     async ctx => {
@@ -37,10 +41,12 @@ module.exports = {
 
       const body = ctx.request.body
 
-      body.x = Math.random() * 500
-      body.y = Math.random() * 500
-
-      const { data } = await miro.createWidget(boardId, { type: 'card', title: body.data.name })
+      const {data} = await miro.createWidget(boardId, {
+          type: 'card',
+          title: body.data.name,
+          x: randomPosition(),
+          y: randomPosition()
+      })
 
       logger.info({ body })
 
@@ -94,8 +100,8 @@ module.exports = {
       const body = ctx.request.body
       const boardId = ctx.params.id
 
-      body.x = Math.random() * 500
-      body.y = Math.random() * 500
+      body.x = randomPosition()
+      body.y = randomPosition()
 
       let widget
 
