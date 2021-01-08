@@ -17,5 +17,6 @@ router.post('/gitlab/webhook', controllers.feature.processGitlabWebhook)
 
 // Send in blue
 router.post('/sib/list', controllers.feature.createSibList)
+router.post('/sib/email-campaign', controllers.feature.createSibEmailCampaign)
 
 module.exports = router
