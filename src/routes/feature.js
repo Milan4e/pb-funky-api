@@ -10,4 +10,8 @@ router.post('/boards/:id/widgets', controllers.feature.createWidget)
 router.get('/boards/:id/widgets', controllers.feature.getAllWidgets)
 router.get('/boards', controllers.feature.getBoards)
 
+// GitLab
+router.post('/gitlab', controllers.feature.createGitlabIssue)
+router.post('/gitlab/webhook', controllers.feature.processGitlabWebhook)
+
 module.exports = router
