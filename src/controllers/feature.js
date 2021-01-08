@@ -152,7 +152,7 @@ module.exports = {
 
       const { data } = await gitlab.createIssue(projectId, {
         title: feature.name,
-        description: feature.description
+        description: `${feature.description} <p/> [Productboard link](${feature.url})`
       })
 
       logger.info({ body })
