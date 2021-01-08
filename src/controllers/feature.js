@@ -2,6 +2,7 @@ const compose = require('koa-compose')
 const logger = require('../common/logger')
 const miro = require('../services/miro')
 const gitlab = require('../services/gitlab')
+const twitter = require('../services/twitter')
 const errors = require('../common/errors')
 const sib = require('../services/sib')
 
@@ -54,6 +55,19 @@ module.exports = {
 
       ctx.status = 200
       ctx.body = { text: 'card', url: `https://miro.com/app/board/${boardId}/?moveToWidget=${data.id}` }
+    },
+  ]),
+
+  tweet: compose([
+    async ctx => {
+      const body = ctx.request.body
+
+      const data = await twitter.tweet(body.data.name)
+
+      logger.info({ data })
+
+      ctx.status = 200
+      ctx.body = { text: 'tweet', url: `https://twitter.com/Genericintegra1/status/${data.id_str}` }
     },
   ]),
 
