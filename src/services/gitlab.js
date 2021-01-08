@@ -4,7 +4,8 @@ const baseUrl = 'https://gitlab.com/api/v4'
 const pbBaseUrl = 'https://TODO'
 const integrationId = "TODO"
 
-const mapping = []
+const issueIdsToFeatureIds = []
+const featureIdsToIssueIIDs = []
 
 module.exports = {
     createIssue: async (projectId, issue) => {
@@ -20,12 +21,31 @@ module.exports = {
         return createdIssue
     },
 
-    storeMapping: function(featureId, issueId) {
-        mapping[issueId] = featureId
+    updateIssue: async (projectId, featureId, newTitle) => {
+        // find issue IID (ID within project)
+        const issueIID = featureIdsToIssueIIDs[featureId]
+
+        const updatedIssue = await axios.default.request({
+            method: "post",
+            url: `${baseUrl}/projects/${projectId}/issues/${issueIID}`,
+            data: {
+                title: newTitle
+            },
+            headers: {
+                "PRIVATE-TOKEN": gitlabToken
+            }
+        })
+
+        return createdIssue
+    },
+
+    storeMapping: function(featureId, issue) {
+        issueIdsToFeatureIds[issue.id] = featureId
+        featureIdsToIssueIIDs[featureId] = issue.iid
     },
 
     notifyPb: async (issueId, issueProjectId, url, state) => {
-        const featureId = mapping[issueId]
+        const featureId = issueIdsToFeatureIds[issueId]
         const notificationData = {
           data: {
               genericIntegrations: [

@@ -5,6 +5,8 @@ const gitlab = require('../services/gitlab')
 const errors = require('../common/errors')
 const sib = require('../services/sib')
 
+const gitlabProjectId = '23513011'
+
 function randomPosition() {
   return Math.random() * 500
 }
@@ -145,12 +147,10 @@ module.exports = {
 
   createGitlabIssue: compose([
     async ctx => {
-      const projectId = '23513011'
-
       const body = ctx.request.body
       const feature = body.data
 
-      const { data } = await gitlab.createIssue(projectId, {
+      const { data } = await gitlab.createIssue(gitlabProjectId, {
         title: feature.name,
         description: `${feature.description} <p/> [Productboard link](${feature.url})`
       })
@@ -171,6 +171,20 @@ module.exports = {
       logger.info({ attributes })
 
       await gitlab.notifyPb(attributes.id, attributes.iid, attributes.url, attributes.state)
+
+      ctx.status = 200
+      ctx.body = {}
+    }
+  ]),
+
+  updateGitlabIssue: compose([
+    async ctx => {
+      const body = ctx.request.body
+      const feature = body.data
+
+      logger.info({ feature })
+
+      await gitlab.updateIssue(gitlabProjectId, feature.id, feature.name)
 
       ctx.status = 200
       ctx.body = {}

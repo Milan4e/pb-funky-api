@@ -13,6 +13,7 @@ router.get('/boards', controllers.feature.getBoards)
 // GitLab
 router.post('/gitlab', controllers.feature.createGitlabIssue)
 router.post('/gitlab/webhook', controllers.feature.processGitlabWebhook)
+router.put('/gitlab', controllers.feature.updateGitlabIssue)
 
 // Send in blue
 router.post('/sib/list', controllers.feature.createSibList)
