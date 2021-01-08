@@ -186,7 +186,7 @@ module.exports = {
       let list
 
       try {
-        list = await sib.createList({ name: listName })
+        list = await sib.createList(listName)
       } catch (err) {
         ctx.body = err.response.data
         ctx.status = 400
@@ -195,6 +195,28 @@ module.exports = {
 
       ctx.status = 200
       ctx.body = { text: listName, url: `https://my.sendinblue.com/users/list/id/${list.id}` }
+    }
+  ]),
+
+  createSibEmailCampaign: compose([
+    async ctx => {
+      logger.info({ body: ctx.request.body })
+
+      const campaignName = ctx.request.body.data.name
+
+      let campaign
+
+      try {
+        campaign = await sib.createEmailCampaign(campaignName)
+      } catch (err) {
+        logger.info(err)
+        ctx.body = err.response.data
+        ctx.status = 400
+        return
+      }
+
+      ctx.status = 200
+      ctx.body = { text: campaignName, url: `https://my.sendinblue.com/camp/classic/${campaign.id}/confirmation` }
     }
   ])
 }
