@@ -14,4 +14,7 @@ router.get('/boards', controllers.feature.getBoards)
 router.post('/gitlab', controllers.feature.createGitlabIssue)
 router.post('/gitlab/webhook', controllers.feature.processGitlabWebhook)
 
+// Send in blue
+router.post('/sib/list', controllers.feature.createSibList)
+
 module.exports = router

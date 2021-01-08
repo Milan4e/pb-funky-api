@@ -3,9 +3,10 @@ const logger = require('../common/logger')
 const miro = require('../services/miro')
 const gitlab = require('../services/gitlab')
 const errors = require('../common/errors')
+const sib = require('../services/sib')
 
 function randomPosition() {
-    return Math.random() * 500
+  return Math.random() * 500
 }
 
 module.exports = {
@@ -42,11 +43,11 @@ module.exports = {
 
       const body = ctx.request.body
 
-      const {data} = await miro.createWidget(boardId, {
-          type: 'card',
-          title: body.data.name,
-          x: randomPosition(),
-          y: randomPosition()
+      const { data } = await miro.createWidget(boardId, {
+        type: 'card',
+        title: body.data.name,
+        x: randomPosition(),
+        y: randomPosition()
       })
 
       logger.info({ body })
@@ -173,6 +174,27 @@ module.exports = {
 
       ctx.status = 200
       ctx.body = {}
+    }
+  ]),
+
+  createSibList: compose([
+    async ctx => {
+      logger.info({ body: ctx.request.body })
+
+      const listName = ctx.request.body.data.name
+
+      let list
+
+      try {
+        list = await sib.createList({ name: listName })
+      } catch (err) {
+        ctx.body = err.response.data
+        ctx.status = 400
+        return
+      }
+
+      ctx.status = 200
+      ctx.body = { text: listName, url: `https://my.sendinblue.com/users/list/id/${list.id}` }
     }
   ])
 }
