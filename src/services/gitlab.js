@@ -1,4 +1,5 @@
 const axios = require('axios')
+const logger = require('../common/logger')
 const gitlabToken = process.env.GITLAB_TOKEN
 const baseUrl = 'https://gitlab.com/api/v4'
 const pbBaseUrl = 'https://TODO'
@@ -25,8 +26,10 @@ module.exports = {
         // find issue IID (ID within project)
         const issueIID = featureIdsToIssueIIDs[featureId]
 
+        logger.info({ issueIID })
+
         const updatedIssue = await axios.default.request({
-            method: "post",
+            method: "put",
             url: `${baseUrl}/projects/${projectId}/issues/${issueIID}`,
             data: {
                 title: newTitle
@@ -36,7 +39,7 @@ module.exports = {
             }
         })
 
-        return createdIssue
+        return updatedIssue
     },
 
     storeMapping: function(featureId, issue) {

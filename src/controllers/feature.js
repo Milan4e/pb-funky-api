@@ -157,7 +157,7 @@ module.exports = {
 
       logger.info({ body })
 
-      gitlab.storeMapping(feature.id, data.id)
+      gitlab.storeMapping(feature.id, data)
 
       ctx.status = 200
       ctx.body = { text: `Issue ${data.iid}`, url: `${data.web_url}` }
