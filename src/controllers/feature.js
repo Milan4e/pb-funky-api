@@ -1,6 +1,7 @@
 const compose = require('koa-compose')
 const logger = require('../common/logger')
 const miro = require('../services/miro')
+const gitlab = require('../services/gitlab')
 const errors = require('../common/errors')
 
 module.exports = {
@@ -134,4 +135,38 @@ module.exports = {
       ctx.body = widgets
     },
   ]),
+
+  createGitlabIssue: compose([
+    async ctx => {
+      const projectId = '23513011'
+
+      const body = ctx.request.body
+      const feature = body.data
+
+      const { data } = await gitlab.createIssue(projectId, {
+        title: feature.name,
+        description: feature.description
+      })
+
+      logger.info({ body })
+
+      gitlab.storeMapping(feature.id, data.id)
+
+      ctx.status = 200
+      ctx.body = { text: `Issue ${data.iid}`, url: `${data.web_url}` }
+    },
+  ]),
+
+  processGitlabWebhook: compose([
+    async ctx => {
+      const attributes = ctx.request.body.object_attributes
+
+      logger.info({ attributes })
+
+      await gitlab.notifyPb(attributes.id, attributes.iid, attributes.url, attributes.state)
+
+      ctx.status = 200
+      ctx.body = {}
+    }
+  ])
 }
