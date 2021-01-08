@@ -1,6 +1,5 @@
 const axios = require('axios')
 const gitlabToken = process.env.GITLAB_TOKEN
-const featuresApiToken = process.env.FEATURES_API_TOKEN
 const baseUrl = 'https://gitlab.com/api/v4'
 const pbBaseUrl = 'https://TODO'
 const integrationId = "TODO"
@@ -31,7 +30,7 @@ module.exports = {
           data: {
               genericIntegrations: [
                   {
-                      id: integrationId,
+                      id: '6bb9d18e-5390-43e4-9696-47b289e03ccd',
                       text: `${state} Issue ${issueProjectId}`,
                       url: url
                   }
@@ -39,14 +38,16 @@ module.exports = {
           }
         }
 
-        // TODO: use correct address and stuff
         const response = await axios.default.request({
-            method: "post",
-            // TODO: feature ID is a query param
-            url: `https://007b27b6cd3260d512d375e6e14c172f.m.pipedream.net`,
+            method: "PUT",
+            url: `http://localhost:8080/features/${featureId}`,
             data: notificationData,
             headers: {
-                // TODO
+                'X-Space-Id': 46886,
+                'X-User-Id': 22872,
+                'X-Role': 'admin',
+                'Content-Type': 'application/json',
+                'X-Version': '1'
             }
         })
 
