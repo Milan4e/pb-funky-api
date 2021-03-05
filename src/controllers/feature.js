@@ -5,9 +5,8 @@ const gitlab = require('../services/gitlab')
 const twitter = require('../services/twitter')
 const errors = require('../common/errors')
 const sib = require('../services/sib')
-const axios = require('axios')
 
-const productboardToken = process.env.PRODUCTBOARD_TOKEN
+
 
 function randomPosition() {
   return Math.random() * 500
@@ -166,13 +165,7 @@ module.exports = {
 
       const body = ctx.request.body;
 
-      const featureResponse = await axios.default.get(body.data.feature.links.self, {
-        headers: {
-          Authorization: `Bearer ${productboardToken}`,
-          'X-Version': 1,
-          Accept: 'application/json'
-        }
-      })
+      const featureResponse = await gitlab.getFeatureFromPb(body.data.feature.links.self)
 
       let feature = featureResponse.data.data;
 
@@ -188,8 +181,8 @@ module.exports = {
         "data": {
           "connection": {
             "state": "connected",
-            "label": "Test",
-            "hoverLabel": `Issue ${data.iid}`,
+            "label": data.state,
+            "hoverLabel": data.iid,
             "tooltip": `Issue ${data.iid}`,
             "color": "blue",
             "targetUrl": `${data.web_url}`
@@ -211,8 +204,6 @@ module.exports = {
   processGitlabWebhook: compose([
     async ctx => {
       const attributes = ctx.request.body.object_attributes
-
-      logger.info({ attributes })
 
       await gitlab.notifyPb(attributes.id, attributes.iid, attributes.url, attributes.state)
 

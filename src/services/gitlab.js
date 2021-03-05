@@ -2,13 +2,20 @@ const axios = require('axios')
 const gitlabToken = process.env.GITLAB_TOKEN
 const baseUrl = 'https://gitlab.com/api/v4'
 const pbBaseUrl = 'https://TODO'
-const integrationId = "TODO"
+const integrationId = "5685b366-fffa-4f35-b1ae-e0506b232a5b"
+const productboardToken = process.env.PRODUCTBOARD_TOKEN
+const logger = require('../common/logger')
 
 const mapping = []
 
+const pbHeaders = {
+    Authorization: `Bearer ${productboardToken}`,
+    'X-Version': 1,
+    Accept: 'application/json'
+};
 module.exports = {
     createIssue: async (projectId, issue) => {
-        const createdIssue = await axios.default.request({
+        return await axios.default.request({
             method: "post",
             url: `${baseUrl}/projects/${projectId}/issues`,
             data: issue,
@@ -16,41 +23,40 @@ module.exports = {
                 "PRIVATE-TOKEN": gitlabToken
             }
         })
-
-        return createdIssue
     },
 
     storeMapping: function(featureId, issueId) {
         mapping[issueId] = featureId
     },
 
+    getFeatureFromPb : async (uri) => {
+        return await axios.default.get(uri, {
+            headers: pbHeaders
+        })
+    },
+
     notifyPb: async (issueId, issueProjectId, url, state) => {
         const featureId = mapping[issueId]
-        const notificationData = {
-          data: {
-              genericIntegrations: [
-                  {
-                      id: '6bb9d18e-5390-43e4-9696-47b289e03ccd',
-                      text: `${state} Issue ${issueProjectId}`,
-                      url: url
-                  }
-              ]
-          }
+
+        const connectionData = {
+            "data": {
+                "connection": {
+                    "state": "connected",
+                    "label": state,
+                    "hoverLabel": `${issueId}`,
+                    "tooltip": `Issue ${issueId}`,
+                    "color": "blue",
+                    "targetUrl": url
+                }
+            }
         }
 
-        const response = await axios.default.request({
+        return await axios.default.request({
             method: "PUT",
-            url: `http://localhost:8080/features/${featureId}`,
-            data: notificationData,
-            headers: {
-                'X-Space-Id': 46886,
-                'X-User-Id': 22872,
-                'X-Role': 'admin',
-                'Content-Type': 'application/json',
-                'X-Version': '1'
-            }
+            // Should be loaded from mapping
+            url: `https://api.productboard.com/plugin-integrations/${integrationId}/connections/${featureId}`,
+            data: connectionData,
+            headers: pbHeaders
         })
-
-        return response
     }
 }
