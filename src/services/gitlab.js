@@ -6,7 +6,8 @@ const integrationId = "5685b366-fffa-4f35-b1ae-e0506b232a5b"
 const productboardToken = process.env.PRODUCTBOARD_TOKEN
 const logger = require('../common/logger')
 
-const mapping = []
+const issueIdsToFeatureIds = []
+const featureIdsToIssueIIDs = []
 
 const pbHeaders = {
     Authorization: `Bearer ${productboardToken}`,
@@ -25,8 +26,29 @@ module.exports = {
         })
     },
 
-    storeMapping: function(featureId, issueId) {
-        mapping[issueId] = featureId
+    updateIssue: async (projectId, featureId, newTitle) => {
+        // find issue IID (ID within project)
+        const issueIID = featureIdsToIssueIIDs[featureId]
+
+        logger.info({ issueIID })
+
+        const updatedIssue = await axios.default.request({
+            method: "put",
+            url: `${baseUrl}/projects/${projectId}/issues/${issueIID}`,
+            data: {
+                title: newTitle
+            },
+            headers: {
+                "PRIVATE-TOKEN": gitlabToken
+            }
+        })
+
+        return updatedIssue
+    },
+
+    storeMapping: function(featureId, issue) {
+        issueIdsToFeatureIds[issue.id] = featureId
+        featureIdsToIssueIIDs[featureId] = issue.iid
     },
 
     getFeatureFromPb : async (uri) => {
@@ -36,15 +58,15 @@ module.exports = {
     },
 
     notifyPb: async (issueId, issueProjectId, url, state) => {
-        const featureId = mapping[issueId]
+        const featureId = issueIdsToFeatureIds[issueId]
 
         const connectionData = {
             "data": {
                 "connection": {
                     "state": "connected",
                     "label": state,
-                    "hoverLabel": `${issueId}`,
-                    "tooltip": `Issue ${issueId}`,
+                    "hoverLabel": issueProjectId,
+                    "tooltip": `Issue ${issueProjectId}`,
                     "color": "blue",
                     "targetUrl": url
                 }

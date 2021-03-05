@@ -5,7 +5,7 @@ const gitlab = require('../services/gitlab')
 const twitter = require('../services/twitter')
 const errors = require('../common/errors')
 const sib = require('../services/sib')
-
+const projectId = '23513011'
 
 
 function randomPosition() {
@@ -161,8 +161,6 @@ module.exports = {
 
   createGitlabIssue: compose([
     async ctx => {
-      const projectId = '23513011'
-
       const body = ctx.request.body;
 
       const featureResponse = await gitlab.getFeatureFromPb(body.data.feature.links.self)
@@ -174,7 +172,7 @@ module.exports = {
         description: `${feature.description}`
       })
 
-      gitlab.storeMapping(feature.id, data.id)
+      gitlab.storeMapping(feature.id, data)
 
       ctx.status = 200
       ctx.body = {
@@ -201,6 +199,20 @@ module.exports = {
     },
   ]),
 
+  updateGitlabIssue: compose([
+    async ctx => {
+      const body = ctx.request.body
+      const feature = body.data
+
+      logger.info({ feature })
+
+      await gitlab.updateIssue(gitlabProjectId, feature.id, feature.name)
+
+      ctx.status = 200
+      ctx.body = {}
+    }
+  ]),
+
   processGitlabWebhook: compose([
     async ctx => {
       const attributes = ctx.request.body.object_attributes
@@ -211,6 +223,7 @@ module.exports = {
       ctx.body = {}
     }
   ]),
+
 
   createSibList: compose([
     async ctx => {
