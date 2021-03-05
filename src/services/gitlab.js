@@ -65,7 +65,7 @@ module.exports = {
                 "connection": {
                     "state": "connected",
                     "label": state,
-                    "hoverLabel": issueProjectId,
+                    "hoverLabel": `${issueProjectId}`,
                     "tooltip": `Issue ${issueProjectId}`,
                     "color": "blue",
                     "targetUrl": url
