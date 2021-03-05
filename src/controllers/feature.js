@@ -163,8 +163,6 @@ module.exports = {
     async ctx => {
       const body = ctx.request.body;
 
-      console.log(body.data)
-
       if (body.data.trigger === 'button.unlink') {
         ctx.status = 200
         ctx.body = {
@@ -194,7 +192,7 @@ module.exports = {
               "label": data.state,
               "hoverLabel": `${data.iid}`,
               "tooltip": `Issue ${data.iid}`,
-              "color": "blue",
+              "color": gitlab.colorFromState(data.state),
               "targetUrl": `${data.web_url}`
             }
           }

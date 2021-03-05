@@ -14,6 +14,15 @@ const pbHeaders = {
     'X-Version': 1,
     Accept: 'application/json'
 };
+
+function colorFromState(state) {
+    if (state === 'opened') {
+        return 'blue';
+    } else {
+        return 'red';
+    }
+}
+
 module.exports = {
     createIssue: async (projectId, issue) => {
         return await axios.default.request({
@@ -60,6 +69,8 @@ module.exports = {
         })
     },
 
+    colorFromState: colorFromState,
+
     notifyPb: async (issueId, issueProjectId, url, state) => {
         const featureId = issueIdsToFeatureIds[issueId]
 
@@ -70,7 +81,7 @@ module.exports = {
                     "label": state,
                     "hoverLabel": `${issueProjectId}`,
                     "tooltip": `Issue ${issueProjectId}`,
-                    "color": "blue",
+                    "color": colorFromState(state),
                     "targetUrl": url
                 }
             }
