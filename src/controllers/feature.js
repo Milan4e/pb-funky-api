@@ -163,27 +163,40 @@ module.exports = {
     async ctx => {
       const body = ctx.request.body;
 
-      const featureResponse = await gitlab.getFeatureFromPb(body.data.feature.links.self)
+      console.log(body.data)
 
-      let feature = featureResponse.data.data;
+      if (body.data.trigger === 'button.unlink') {
+        ctx.status = 200
+        ctx.body = {
+          "data": {
+            "connection": {
+              "state": "initial",
+            }
+          }
+        }
+      } else {
+        const featureResponse = await gitlab.getFeatureFromPb(body.data.feature.links.self)
 
-      const { data } = await gitlab.createIssue(gitlabProjectId, {
-        title: feature.name,
-        description: `${feature.description}`
-      })
+        let feature = featureResponse.data.data;
 
-      gitlab.storeMapping(feature.id, data)
+        const {data} = await gitlab.createIssue(gitlabProjectId, {
+          title: feature.name,
+          description: `${feature.description}`
+        })
 
-      ctx.status = 200
-      ctx.body = {
-        "data": {
-          "connection": {
-            "state": "connected",
-            "label": data.state,
-            "hoverLabel": `${data.iid}`,
-            "tooltip": `Issue ${data.iid}`,
-            "color": "blue",
-            "targetUrl": `${data.web_url}`
+        gitlab.storeMapping(feature.id, data)
+
+        ctx.status = 200
+        ctx.body = {
+          "data": {
+            "connection": {
+              "state": "connected",
+              "label": data.state,
+              "hoverLabel": `${data.iid}`,
+              "tooltip": `Issue ${data.iid}`,
+              "color": "blue",
+              "targetUrl": `${data.web_url}`
+            }
           }
         }
       }
@@ -206,8 +219,6 @@ module.exports = {
       const featureResponse = await gitlab.getFeatureFromPb(webhook.links.target)
 
       let feature = featureResponse.data.data;
-
-      console.log(feature)
 
       await gitlab.updateIssue(gitlabProjectId, feature.id, feature.name)
 
