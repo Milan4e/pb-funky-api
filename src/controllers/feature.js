@@ -203,7 +203,11 @@ module.exports = {
     async ctx => {
       const webhook = ctx.request.body
 
-      const feature = await gitlab.getFeatureFromPb(webhook.links.target)
+      const featureResponse = await gitlab.getFeatureFromPb(webhook.links.target)
+
+      let feature = featureResponse.data.data;
+
+      console.log(feature)
 
       await gitlab.updateIssue(gitlabProjectId, feature.id, feature.name)
 

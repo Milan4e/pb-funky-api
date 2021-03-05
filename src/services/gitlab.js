@@ -29,6 +29,9 @@ module.exports = {
     updateIssue: async (projectId, featureId, newTitle) => {
         // find issue IID (ID within project)
         const issueIID = featureIdsToIssueIIDs[featureId]
+        if (!issueIID) {
+            return;
+        }
 
         logger.info({ issueIID })
 
