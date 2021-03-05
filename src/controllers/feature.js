@@ -5,6 +5,9 @@ const gitlab = require('../services/gitlab')
 const twitter = require('../services/twitter')
 const errors = require('../common/errors')
 const sib = require('../services/sib')
+const axios = require('axios')
+
+const productboardToken = process.env.PRODUCTBOARD_TOKEN
 
 function randomPosition() {
   return Math.random() * 500
@@ -161,20 +164,47 @@ module.exports = {
     async ctx => {
       const projectId = '23513011'
 
-      const body = ctx.request.body
-      const feature = body.data
+      const body = ctx.request.body;
+
+      const featureResponse = await axios.default.get(body.data.feature.links.self, {
+        headers: {
+          Authorization: `Bearer ${productboardToken}`,
+          'X-Version': 1,
+          Accept: 'application/json'
+        }
+      })
+
+      let feature = featureResponse.data.data;
 
       const { data } = await gitlab.createIssue(projectId, {
         title: feature.name,
-        description: `${feature.description} <p/> [Productboard link](${feature.url})`
+        description: `${feature.description}`
       })
-
-      logger.info({ body })
 
       gitlab.storeMapping(feature.id, data.id)
 
       ctx.status = 200
-      ctx.body = { text: `Issue ${data.iid}`, url: `${data.web_url}` }
+      ctx.body = {
+        "data": {
+          "connection": {
+            "state": "connected",
+            "label": "Test",
+            "hoverLabel": `Issue ${data.iid}`,
+            "tooltip": `Issue ${data.iid}`,
+            "color": "blue",
+            "targetUrl": `${data.web_url}`
+          }
+        }
+      }
+    },
+  ]),
+
+  validate: compose([
+    async ctx => {
+      const token = ctx.request.query.validationToken
+
+      ctx.status = 200
+      ctx.body = token
     },
   ]),
 

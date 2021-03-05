@@ -12,6 +12,7 @@ router.get('/boards/:id/widgets', controllers.feature.getAllWidgets)
 router.get('/boards', controllers.feature.getBoards)
 
 // GitLab
+router.get('/gitlab', controllers.feature.validate)
 router.post('/gitlab', controllers.feature.createGitlabIssue)
 router.post('/gitlab/webhook', controllers.feature.processGitlabWebhook)
 
