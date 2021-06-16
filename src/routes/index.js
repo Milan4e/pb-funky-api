@@ -1,7 +1,7 @@
 const KoaRouter = require('koa-router')
 
 const router = new KoaRouter()
-const feature = require('./feature')
+const feature = require('./miro')
 
 router.get('/', ctx => {
   ctx.status = 200

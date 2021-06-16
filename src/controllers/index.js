@@ -1,6 +1,6 @@
 
-const feature = require('./feature')
+const miro = require('./miro')
 
 module.exports = {
-  feature,
+  miro,
 }

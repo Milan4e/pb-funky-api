@@ -1,10 +1,7 @@
 const compose = require('koa-compose')
 const logger = require('../common/logger')
 const miro = require('../services/miro')
-const gitlab = require('../services/gitlab')
-const twitter = require('../services/twitter')
 const errors = require('../common/errors')
-const sib = require('../services/sib')
 
 function randomPosition() {
   return Math.random() * 500
@@ -55,19 +52,6 @@ module.exports = {
 
       ctx.status = 200
       ctx.body = { text: 'card', url: `https://miro.com/app/board/${boardId}/?moveToWidget=${data.id}` }
-    },
-  ]),
-
-  tweet: compose([
-    async ctx => {
-      const body = ctx.request.body
-
-      const data = await twitter.tweet(body.data.name)
-
-      logger.info({ data })
-
-      ctx.status = 200
-      ctx.body = { text: 'tweet', url: `https://twitter.com/Genericintegra1/status/${data.id_str}` }
     },
   ]),
 
@@ -156,81 +140,4 @@ module.exports = {
       ctx.body = widgets
     },
   ]),
-
-  createGitlabIssue: compose([
-    async ctx => {
-      const projectId = '23513011'
-
-      const body = ctx.request.body
-      const feature = body.data
-
-      const { data } = await gitlab.createIssue(projectId, {
-        title: feature.name,
-        description: `${feature.description} <p/> [Productboard link](${feature.url})`
-      })
-
-      logger.info({ body })
-
-      gitlab.storeMapping(feature.id, data.id)
-
-      ctx.status = 200
-      ctx.body = { text: `Issue ${data.iid}`, url: `${data.web_url}` }
-    },
-  ]),
-
-  processGitlabWebhook: compose([
-    async ctx => {
-      const attributes = ctx.request.body.object_attributes
-
-      logger.info({ attributes })
-
-      await gitlab.notifyPb(attributes.id, attributes.iid, attributes.url, attributes.state)
-
-      ctx.status = 200
-      ctx.body = {}
-    }
-  ]),
-
-  createSibList: compose([
-    async ctx => {
-      logger.info({ body: ctx.request.body })
-
-      const listName = ctx.request.body.data.name
-
-      let list
-
-      try {
-        list = await sib.createList(listName)
-      } catch (err) {
-        ctx.body = err.response.data
-        ctx.status = 400
-        return
-      }
-
-      ctx.status = 200
-      ctx.body = { text: listName, url: `https://my.sendinblue.com/users/list/id/${list.id}` }
-    }
-  ]),
-
-  createSibEmailCampaign: compose([
-    async ctx => {
-      logger.info({ body: ctx.request.body })
-
-      const campaignName = ctx.request.body.data.name
-
-      let campaign
-
-      try {
-        campaign = await sib.createEmailCampaign(campaignName)
-      } catch (err) {
-        logger.info(err)
-        ctx.body = err.response.data
-        ctx.status = 400
-        return
-      }
-
-      ctx.status = 200
-      ctx.body = { text: campaignName, url: `https://my.sendinblue.com/camp/classic/${campaign.id}/confirmation` }
-    }
-  ])
 }
