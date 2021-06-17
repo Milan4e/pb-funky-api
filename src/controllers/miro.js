@@ -11,7 +11,7 @@ module.exports = {
         await pb.createNote({
           title: data.title,
           content: data.content,
-          customerEmail: data.customerEmail,
+          customer_email: data.customerEmail,
         })
       } catch (err) {
         throw new errors.ApiError('Failed to create note in PB :(')
