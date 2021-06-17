@@ -28,7 +28,7 @@ module.exports = {
       const token = ctx.request.body.token
       const state = JSON.stringify({ token })
 
-      const url = `https://miro.com/oauth/authorize?response_type=code&client_id=${miro.clientId}&redirect_uri=${miro.redirectUrl}&state=${state}`
+      const url = `https://miro.com/oauth/authorize?response_type=code&client_id=${miro.clientId}&redirect_uri=${miro.redirectUri}&state=${state}`
       ctx.redirect(url)
     }
   ]),

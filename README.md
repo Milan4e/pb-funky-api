@@ -4,6 +4,12 @@
 
 # npm start
 
+example with configuration:
+
+```bash
+  env MIRO_APP_CLIENT_ID=123 MIRO_APP_CLIENT_SECRET=abc MIRO_APP_REDIRECT_URI=host/oauth/install npm start
+```
+
 ## Service will run on localhost:3000
 
 
