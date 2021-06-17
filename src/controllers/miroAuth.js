@@ -50,6 +50,8 @@ module.exports = {
 
           console.log(`Received access_token '${access_token}' for token=${token}`)
 
+          miro.store(user_id, access_token)
+
           ctx.status = 200
           ctx.body = `Miro successfully authorized`
         } else {

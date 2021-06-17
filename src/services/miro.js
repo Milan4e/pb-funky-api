@@ -12,6 +12,9 @@ const redirectUrl =  `${host}/oauth/install`
 const clientId = '3074457360290041502'
 const clientSecret = 'BKQW61r0zpbuKnliYcSCwptdC3U7oVEc'
 
+// FIXME: use real DB
+const users_to_tokens = {}
+
 module.exports = {
   redirectUrl,
   clientId,
@@ -48,11 +51,25 @@ module.exports = {
     return data
   },
 
+  getCurrentUser: async (userId) => {
+    const token = users_to_tokens[userId]
+
+    const { data } = await axios.default.get(`${baseUrl}/users/me?access_token=${token}`)
+
+    return data
+  },
+
   getToken: async (code) => {
     const url = `${baseUrl}/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${redirectUrl}&client_id=${clientId}&client_secret=${clientSecret}&`
 
     const { data } = await axios.default.post(url)
 
     return data
-  }
+  },
+
+  store: function (userId, token) {
+    users_to_tokens[userId] = token
+
+    console.log("token storage", users_to_tokens)
+  },
 }
