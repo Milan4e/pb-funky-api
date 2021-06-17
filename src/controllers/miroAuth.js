@@ -11,6 +11,8 @@ module.exports = {
         <html>
           <head></head>
           <body>
+            <h2>Install a Miro integration</h2>
+
             <form action="/oauth/init" method="post">
               <label for="token">Public API Token:</label><input type="text" name="token" id="token" /><br/>
               <input type="submit">
