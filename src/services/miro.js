@@ -4,13 +4,19 @@ const baseUrl = 'https://api.miro.com/v1'
 const teamId = '3074457353058506671' // will be returned with Oauth
 
 // Auth
-const redirectUrl = 'https://proxy.schovi.cz/oauth/install'
+// TODO: move to env variable
+const host = process.env['HOST']
+const redirectUrl =  `${host}/oauth/install`
 
 // Should be stored somehow secured :)
 const clientId = '3074457360290041502'
 const clientSecret = 'BKQW61r0zpbuKnliYcSCwptdC3U7oVEc'
 
 module.exports = {
+  redirectUrl,
+  clientId,
+  clientSecret,
+
   createBoard: async ({ name, description }) => {
     const board = await axios.default.post(`${baseUrl}/boards?access_token=${miroToken}`, {
       name,

@@ -30,7 +30,6 @@ app.use(koaCors({
 }))
 
 app.use(middleware.errors.handleErrors)
-
 // Setup routes
 app.use(routes)
 
