@@ -1,4 +1,5 @@
 const compose = require('koa-compose')
+const db = require('../database')
 // const logger = require('../common/logger')
 const miro = require('../services/miro')
 // const errors = require('../common/errors')
@@ -44,9 +45,15 @@ module.exports = {
 
         if (state) {
           // Auth flow initiated from our service with a public api token
-          // TODO: store the JWT
           parsedState = JSON.parse(state)
           token = parsedState.token
+
+          await db.User.create({
+            access_token,
+            user_id,
+            token,
+            team_id,
+          })
 
           console.log(`Received access_token '${access_token}' for token=${token}`)
 
