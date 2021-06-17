@@ -90,6 +90,6 @@ async function openModal() {
     }
 
     withValidSelection(function () {
-        miro.board.ui.openModal("/public/modal.html", { width: 400, height: 450 })
+        miro.board.ui.openModal("/public/modal.html", { width: 400, height: 375 })
     })
 }
