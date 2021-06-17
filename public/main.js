@@ -9,7 +9,7 @@ const WIDGET_TYPES = {
     },
     "CARD": {
         titleExtractor: function (widget) {
-            return widget.title
+            return stripHtml(widget.title)
         },
         contentExtractor: function (widget) {
             return widget.description
@@ -23,6 +23,11 @@ const WIDGET_TYPES = {
             return widget.text
         }
     }
+}
+
+function stripHtml(html){
+    let doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
 }
 
 async function withValidSelection(action) {
@@ -57,6 +62,6 @@ async function withValidSelection(action) {
 
 function openModal() {
     withValidSelection(function () {
-        miro.board.ui.openModal("modal.html", { width: 400, height: 450 })
+        miro.board.ui.openModal("public/modal.html", { width: 400, height: 450 })
     })
 }
