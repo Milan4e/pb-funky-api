@@ -60,7 +60,35 @@ async function withValidSelection(action) {
     action(widget, title, content)
 }
 
-function openModal() {
+async function auth() {
+    // // State is an optional parameter.
+    // // You can use it to pass extra parameters to the redirect URI page or for security purposes.
+    // // See https://developers.google.com/identity/protocols/oauth2/web-server#creatingclient,
+    // const installState = await fetch(
+    //     'https://proxy.schovi.cz/oauth/init',
+    //     { credentials: 'same-origin' }
+    // ).then(res => res.text())
+
+    // Ask the user to authorize the app.
+    await miro.requestAuthorization({
+        // To successfully complete the miro.requestAuthorization call,
+        // the redirect URI page must redirect the user back to Miro.
+        // See the documentation below.
+        redirect_uri: 'https://proxy.schovi.cz/oauth/install',
+        // state: installState
+    })
+}
+
+async function openModal() {
+    console.log('open modal')
+    const isAuthorized = await miro.isAuthorized()
+
+    if (!isAuthorized) {
+        await auth()
+
+        await new Promise(resolve => setTimeout(resolve, 1000))
+    }
+
     withValidSelection(function () {
         miro.board.ui.openModal("public/modal.html", { width: 400, height: 450 })
     })
