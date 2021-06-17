@@ -13,8 +13,12 @@
     </p>
 
     <form id="form" autocomplete="off">
-        <label for="token">Public API Token:</label><input type="text" name="token" id="token" required /><br/>
-        <input type="submit" label="Authorize">
+        <div class="form-group field-title">
+            <textarea type="text" name="token" id="token" class="form-input" placeholder="Productboard public API token" required></textarea><br/>
+        </div>
+        <div class="form-group field-title">
+            <input type="submit" value="Continue">
+        </div>
     </form>
     </body>
 </html>
