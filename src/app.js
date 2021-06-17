@@ -3,6 +3,8 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const koaCompress = require('koa-compress')
 const koaCors = require('kcors')
+const serve  = require('koa-static')
+const mount  = require('koa-mount')
 const routes = require('./routes')
 const middleware = require('./middleware')
 const logger = require('./common/logger')
@@ -31,6 +33,9 @@ app.use(middleware.errors.handleErrors)
 
 // Setup routes
 app.use(routes)
+
+// setup static files serving
+app.use(mount('/public', serve('./public')));
 
 // Start method
 app.start = () => {

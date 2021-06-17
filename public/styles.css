@@ -1,0 +1,27 @@
+* {
+    font-family: sans-serif;
+}
+
+body {
+    padding: 10px;
+}
+
+div {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+}
+
+input,textarea {
+    width: 100%;
+}
+
+textarea {
+    height: 5em;
+}
+
+#insight {
+    background-color: lightgray;
+}

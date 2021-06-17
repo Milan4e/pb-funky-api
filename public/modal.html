@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="modal.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Push as insight</h1>
+<div class="submit-form">
+    <div class="form-group field-title">
+        <label for="title">Title</label>
+        <input id="title" type="text" placeholder="Note title" name="title">
+    </div>
+    <div class="form-group field-insight">
+        <label for="insight">Insight</label>
+        <textarea id="insight" name="insight" readonly="readonly"></textarea>
+<!--        <div id="insight"></div>-->
+    </div>
+    <div class="form-group field-comment">
+        <label for="comment" >Comment</label>
+        <textarea id="comment" placeholder="Optional comment to be pushed with the insight" name="comment"></textarea>
+    </div>
+    <input type="hidden" name="username" id="username" value="user">
+    <input type="hidden" name="email" id="email" value="john.doe@productboard.com">
+    <input type="hidden" name="link" id="link">
+    <!-- TODO: submit action -->
+    <input type="submit" name="submit" id="submit">
+</div>
+</body>
+</html>
