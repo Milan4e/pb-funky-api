@@ -8,25 +8,24 @@
 </head>
 <body>
 <h1>Push as insight</h1>
-<div class="submit-form">
+<form action="/api/miro/note" method="post" >
     <div class="form-group field-title">
         <label for="title">Title</label>
         <input id="title" type="text" placeholder="Note title" name="title">
     </div>
     <div class="form-group field-insight">
-        <label for="insight">Insight</label>
-        <textarea id="insight" name="insight" readonly="readonly"></textarea>
-<!--        <div id="insight"></div>-->
+        <label for="content">Insight</label>
+        <textarea id="content" name="content" readonly="readonly"></textarea>
+        <!--        <div id="content"></div>-->
     </div>
     <div class="form-group field-comment">
         <label for="comment" >Comment</label>
         <textarea id="comment" placeholder="Optional comment to be pushed with the insight" name="comment"></textarea>
     </div>
     <input type="hidden" name="username" id="username" value="user">
-    <input type="hidden" name="email" id="email" value="john.doe@productboard.com">
+    <input type="hidden" name="customerEmail" id="customerEmail" value="john.doe@productboard.com">
     <input type="hidden" name="link" id="link">
-    <!-- TODO: submit action -->
     <input type="submit" name="submit" id="submit">
-</div>
+</form>
 </body>
 </html>

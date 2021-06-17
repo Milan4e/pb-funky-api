@@ -4,7 +4,7 @@ miro.onReady(() => {
             document.getElementById("title").value = title
         }
         // extract note content
-        document.getElementById("insight").value = content
+        document.getElementById("content").value = content
         // create link
         let boardId = await miro.board.info.get()
         let widgetId = widget.id
