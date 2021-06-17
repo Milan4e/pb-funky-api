@@ -3,6 +3,6 @@ const controllers = require('../controllers')
 
 const router = new Router({ prefix: '/api/miro' })
 
-router.get('/', controllers.miro.getAll)
+router.post('/note', controllers.miro.createNote)
 
 module.exports = router

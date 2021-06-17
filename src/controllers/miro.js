@@ -1,143 +1,23 @@
 const compose = require('koa-compose')
-const logger = require('../common/logger')
-const miro = require('../services/miro')
+const pb = require('../services/pb')
 const errors = require('../common/errors')
 
-function randomPosition() {
-  return Math.random() * 500
-}
-
 module.exports = {
-  getOne: compose([
+  createNote: compose([
     async ctx => {
-
-      ctx.status = 200
-      ctx.body = {}
-    },
-  ]),
-
-  getAll: compose([
-    async ctx => {
-      ctx.status = 200
-      ctx.body = {}
-    },
-  ]),
-
-  create: compose([
-    async ctx => {
-      const boardId = 'o9J_lZ6I-ys='
-      //   {
-      //     "data": {
-      //         "id": "1d1ce8f8-7cdd-42c7-b2cd-4b4df9d8741e",
-      //         "name": "Archive a ticket",
-      //         "description": "Smoke test description 2021-01-05T13:34:25.507521Z",
-      //         "type": "subfeature",
-      //         "status": {
-      //             "id": 180915,
-      //             "name": "In progress"
-      //         }
-      //     }
-      //   }
-
-      const body = ctx.request.body
-
-      const { data } = await miro.createWidget(boardId, {
-        type: 'card',
-        title: body.data.name,
-        x: randomPosition(),
-        y: randomPosition()
-      })
-
-      logger.info({ body })
-
-      ctx.status = 200
-      ctx.body = { text: 'card', url: `https://miro.com/app/board/${boardId}/?moveToWidget=${data.id}` }
-    },
-  ]),
-
-  createBoard: compose([
-    async ctx => {
-      const body = ctx.request.body
-      logger.info({ body })
-
-      let board
+      const data = ctx.request.body
 
       try {
-        const { data } = await miro.createBoard(body)
-
-        board = data
+        await pb.createNote({
+          title: data.title,
+          content: data.content,
+          customerEmail: data.customerEmail,
+        })
       } catch (err) {
-        logger.error({ err }, 'Oops')
-        throw new errors.ApiError('Failed to create board', 500)
+        throw new errors.ApiError('Failed to create note in PB :(')
       }
 
-      ctx.status = 200
-      ctx.body = board
-    },
-  ]),
-
-  getBoards: compose([
-    async ctx => {
-      let boards
-
-      try {
-        const { data } = await miro.getBoards()
-
-        boards = data
-      } catch (err) {
-        ctx.status = err.response.status
-        ctx.body = err.response.data
-        return
-      }
-
-      ctx.status = 200
-      ctx.body = { boards }
-    },
-  ]),
-
-  createWidget: compose([
-    async ctx => {
-      const body = ctx.request.body
-      const boardId = ctx.params.id
-
-      body.x = randomPosition()
-      body.y = randomPosition()
-
-      let widget
-
-      try {
-        const { data } = await miro.createWidget(boardId, body)
-
-        widget = data
-      } catch (err) {
-        ctx.status = err.response.status
-        ctx.body = err.response.data
-        return
-      }
-
-      ctx.status = 200
-      ctx.body = widget
-    },
-  ]),
-
-  getAllWidgets: compose([
-    async ctx => {
-      const boardId = ctx.params.id
-
-      let widgets
-
-      try {
-        const { data } = await miro.getAllWidgets(boardId)
-
-        widgets = data
-      } catch (err) {
-        ctx.status = err.response.status
-        ctx.body = err.response.data
-        return
-      }
-
-      ctx.status = 200
-      ctx.body = widgets
+      ctx.status = 201
     },
   ]),
 }
