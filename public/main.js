@@ -74,7 +74,7 @@ async function auth() {
         // To successfully complete the miro.requestAuthorization call,
         // the redirect URI page must redirect the user back to Miro.
         // See the documentation below.
-        redirect_uri: 'https://proxy.schovi.cz/oauth/install',
+        redirect_uri: 'https://pb-funky-api.herokuapp.com/oauth/install',
         // state: installState
     })
 }
