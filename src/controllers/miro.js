@@ -11,13 +11,14 @@ module.exports = {
       try {
         const { email, token } = await miro.getCurrentUser(data.userId, data.teamId)
         const tags = (data.tags || "").split(",").map(function (e) { return e.trim() }).filter(Boolean)
+        tags.push("Miro")
 
         await pb.createNote(token, {
-          title: data.title,
+          title: `Miro: ${data.title}`,
           content: data.content,
           customer_email: email,
           display_url: data.link,
-          tags: tags.length > 0 ? tags : undefined
+          tags: tags
         })
       } catch (err) {
         throw new errors.ApiError('Failed to create note in PB :(')
