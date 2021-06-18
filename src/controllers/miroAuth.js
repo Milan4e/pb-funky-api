@@ -48,12 +48,21 @@ module.exports = {
           parsedState = JSON.parse(state)
           token = parsedState.token
 
-          await db.User.create({
-            access_token,
-            user_id,
-            token,
-            team_id,
+          const exists = db.User.findOne({
+            attributes: ['id'],
+            where: { user_id, team_id },
           })
+
+          if (exists) {
+            await db.User.update({ access_token, token }, { where: { user_id, team_id } })
+          } else {
+            await db.User.create({
+              access_token,
+              user_id,
+              token,
+              team_id,
+            })
+          }
 
           console.log(`Received access_token '${access_token}' for token=${token}`)
 
