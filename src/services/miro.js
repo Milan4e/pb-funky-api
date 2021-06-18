@@ -46,11 +46,11 @@ module.exports = {
   },
 
   getCurrentUser: async (userId, teamId) => {
-    const { access_token } = await db.User.findOne({ where: { user_id: userId.toString(), team_id: teamId.toString() }})
+    const { access_token, token } = await db.User.findOne({ where: { user_id: userId.toString(), team_id: teamId.toString() }})
 
     const { data } = await axios.default.get(`${baseUrl}/users/me?access_token=${access_token}`)
 
-    return data
+    return { data, token }
   },
 
   getToken: async (code) => {

@@ -9,10 +9,10 @@ module.exports = {
       const data = ctx.request.body
 
       try {
-        const { email } = await miro.getCurrentUser(data.userId, data.teamId)
+        const { data: { email }, token } = await miro.getCurrentUser(data.userId, data.teamId)
         const tags = (data.tags || "").split(",").map(function (e) { return e.trim() }).filter(Boolean)
 
-        await pb.createNote({
+        await pb.createNote(token, {
           title: data.title,
           content: data.content,
           customer_email: email,
