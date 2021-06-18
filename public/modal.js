@@ -10,8 +10,11 @@ miro.onReady(() => {
         let widgetId = widget.id
         let widgetLink = "https://miro.com/app/board/" + boardInfo.id + "/?moveToWidget=" + widgetId
         document.getElementById("link").value = widgetLink
+        document.getElementById("widgetId").value = widgetId
     })
 })
+
+const pbTagName = "PB"
 
 async function submitForm() {
     const data = {}
@@ -31,11 +34,29 @@ async function submitForm() {
     const response = await sendFormData(data)
     if(response.ok) {
         miro.showNotification("Note created")
+        const widgetId = document.getElementById("widgetId").value
+        tagWidget(widgetId)
     } else {
         console.log(response)
         miro.showErrorNotification("Note creation failed, please try again")
     }
     miro.board.ui.closeModal()
+}
+
+async function tagWidget(widgetId) {
+    // try to tag the object using a PB tag
+    try {
+        let pbTag = (await miro.board.tags.get()).filter(function(tag) {return tag.title === pbTagName})
+        if (!pbTag.length) {
+            pbTag = await miro.board.tags.create({ title: pbTagName })
+        }
+        pbTag = pbTag[0]
+        const widgetIds = pbTag.widgetIds
+        widgetIds.push(widgetId)
+        await miro.board.tags.update({ id: pbTag.id, widgetIds: widgetIds })
+    } catch (e) {
+        // ignore
+    }
 }
 
 async function sendFormData(data) {
