@@ -65,8 +65,6 @@ module.exports = {
           })
         }
 
-        miro.store(user_id, access_token)
-
         if (parsedState.source == 'miro') {
           ctx.redirect(`https://miro.com/app-install-completed/?client_id=${ctx.query.client_id}&team_id=${ctx.query.team_id}`)
         } else {
