@@ -9,15 +9,15 @@ module.exports = {
       const data = ctx.request.body
 
       try {
-        const { email } = await miro.getCurrentUser(data.userId)
-        const tags = (data.tags || "").split(",").map(function (e) { return e.trim() })
+        const { email } = await miro.getCurrentUser(data.userId, data.teamId)
+        const tags = (data.tags || "").split(",").map(function (e) { return e.trim() }).filter(Boolean)
 
         await pb.createNote({
           title: data.title,
           content: data.content,
           customer_email: email,
           display_url: data.link,
-          tags: tags
+          tags: tags.length > 0 ? tags : undefined
         })
       } catch (err) {
         throw new errors.ApiError('Failed to create note in PB :(')

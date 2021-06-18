@@ -49,7 +49,7 @@ module.exports = {
         parsedState = JSON.parse(state)
         token = parsedState.token
 
-        const exists = db.User.findOne({
+        const exists = await db.User.findOne({
           attributes: ['id'],
           where: { user_id, team_id },
         })

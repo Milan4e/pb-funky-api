@@ -45,8 +45,8 @@ module.exports = {
     return data
   },
 
-  getCurrentUser: async (userId) => {
-    const { access_token } = await db.User.findByPk(userId)
+  getCurrentUser: async (userId, teamId) => {
+    const { access_token } = await db.User.findOne({ where: { user_id: userId.toString(), team_id: teamId.toString() }})
 
     const { data } = await axios.default.get(`${baseUrl}/users/me?access_token=${access_token}`)
 

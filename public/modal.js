@@ -10,8 +10,6 @@ miro.onReady(() => {
         let widgetId = widget.id
         let widgetLink = "https://miro.com/app/board/" + boardInfo.id + "/?moveToWidget=" + widgetId
         document.getElementById("link").value = widgetLink
-        // set user ID
-        document.getElementById("userId").value = await miro.currentUser.getId()
     })
 })
 
@@ -25,6 +23,10 @@ async function submitForm() {
         miro.showErrorNotification("Title must not be empty!")
         return
     }
+
+    // set user ID
+    data.userId = await miro.currentUser.getId()
+    data.teamId = (await miro.account.get()).id
 
     const response = await sendFormData(data)
     if(response.ok) {
