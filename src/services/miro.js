@@ -1,4 +1,5 @@
 const axios = require('axios')
+const db = require('../database')
 const miroToken = process.env.MIRO_TOKEN
 const baseUrl = 'https://api.miro.com/v1'
 const teamId = '3074457353058506671' // will be returned with Oauth
@@ -7,9 +8,6 @@ const teamId = '3074457353058506671' // will be returned with Oauth
 const redirectUri  =  process.env['MIRO_APP_REDIRECT_URI']
 const clientId     = process.env['MIRO_APP_CLIENT_ID']
 const clientSecret = process.env['MIRO_APP_CLIENT_SECRET']
-
-// FIXME: use real DB
-const users_to_tokens = {}
 
 module.exports = {
   redirectUri,
@@ -48,9 +46,9 @@ module.exports = {
   },
 
   getCurrentUser: async (userId) => {
-    const token = users_to_tokens[userId]
+    const { access_token } = await db.User.findByPk(userId)
 
-    const { data } = await axios.default.get(`${baseUrl}/users/me?access_token=${token}`)
+    const { data } = await axios.default.get(`${baseUrl}/users/me?access_token=${access_token}`)
 
     return data
   },
@@ -61,11 +59,5 @@ module.exports = {
     const { data } = await axios.default.post(url)
 
     return data
-  },
-
-  store: function (userId, token) {
-    users_to_tokens[userId] = token
-
-    console.log("token storage", users_to_tokens)
   },
 }

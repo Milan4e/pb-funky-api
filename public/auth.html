@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <script src="https://miro.com/app/static/sdk.1.1.js"></script>
+        <script type="text/javascript" src="/public/auth.js"></script>
+        <link rel="stylesheet" href="/public/styles.css">
+    </head>
+    <body>
+    <h2>Install a Miro integration</h2>
+
+    <p>
+        First you need to authorize Miro application for your Miro team.
+        To be able to send the notes to productboard you ahve to generate public API token and fill it in the following form.
+    </p>
+
+    <form id="form" autocomplete="off">
+        <div class="form-group field-title">
+            <textarea type="text" name="token" id="token" class="form-input" placeholder="Productboard public API token" required></textarea><br/>
+        </div>
+        <div class="form-group field-title">
+            <input type="submit" value="Continue">
+        </div>
+    </form>
+    </body>
+</html>

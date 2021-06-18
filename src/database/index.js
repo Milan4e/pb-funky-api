@@ -1,7 +1,9 @@
 const Sequelize = require('sequelize')
 const models = require('./models')
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const DATABASE_URL = process.env.DATABASE_URL ? process.env.DATABASE_URL : 'postgres://miro@miro:localhost:5432/miro'
+
+const sequelize = new Sequelize(DATABASE_URL, {
   operatorsAliases: false,
   dialect: 'postgres',
   pool: {

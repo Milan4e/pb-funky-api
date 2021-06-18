@@ -39,46 +39,40 @@ module.exports = {
       let token;
       const { code, state } = ctx.query
 
-      if (code) {
-        // TODO: store following into database
-        const { access_token, user_id, team_id } = await miro.getToken(ctx.query.code)
+      if (!code) {
+        throw "Missing code"
+      }
 
-        if (state) {
-          // Auth flow initiated from our service with a public api token
-          parsedState = JSON.parse(state)
-          token = parsedState.token
+      const { access_token, user_id, team_id } = await miro.getToken(ctx.query.code)
 
-          const exists = db.User.findOne({
-            attributes: ['id'],
-            where: { user_id, team_id },
-          })
+      if (state) {
+        parsedState = JSON.parse(state)
+        token = parsedState.token
 
-          if (exists) {
-            await db.User.update({ access_token, token }, { where: { user_id, team_id } })
-          } else {
-            await db.User.create({
-              access_token,
-              user_id,
-              token,
-              team_id,
-            })
-          }
+        const exists = db.User.findOne({
+          attributes: ['id'],
+          where: { user_id, team_id },
+        })
 
-          console.log(`Received access_token '${access_token}' for token=${token}`)
-
-          miro.store(user_id, access_token)
-
-          ctx.status = 200
-          ctx.body = `Miro successfully authorized`
+        if (exists) {
+          await db.User.update({ access_token, token }, { where: { user_id, team_id } })
         } else {
-          // Auth flow from Miro app itself. Will miss the API token
-          // NOTE: just for debugging, practically harder to use because of missing token
-          console.log(`Received access_token '${access_token}'`)
-
-          ctx.redirect(`https://miro.com/app-install-completed/?client_id=${ctx.query.client_id}&team_id=${ctx.query.team_id}`)
+          await db.User.create({
+            access_token,
+            user_id,
+            token,
+            team_id,
+          })
         }
-      } else {
-        throw "Missing code query param"
+
+        miro.store(user_id, access_token)
+
+        if (parsedState.source == 'miro') {
+          ctx.redirect(`https://miro.com/app-install-completed/?client_id=${ctx.query.client_id}&team_id=${ctx.query.team_id}`)
+        } else {
+          ctx.status = 200
+          ctx.body = `Miro successfully authorized for your team`
+        }
       }
     }
   ])

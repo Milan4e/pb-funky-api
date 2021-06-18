@@ -7,25 +7,26 @@
     <link rel="stylesheet" href="/public/styles.css">
 </head>
 <body>
-<h1>Push as insight</h1>
-<form action="/api/miro/note" method="post" >
+<h1>
+    <img width="30" src="https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/pslfwcfyxsh2lwmmtkvz">
+    Push as insight
+</h1>
+<div id="submit-form">
     <div class="form-group field-title">
         <label for="title">Title</label>
-        <input id="title" type="text" placeholder="Note title" name="title">
+        <input id="title" class="form-input" type="text" placeholder="Note title" name="title">
     </div>
     <div class="form-group field-insight">
         <label for="content">Insight</label>
-        <textarea id="content" name="content" readonly="readonly"></textarea>
-        <!--        <div id="content"></div>-->
+        <textarea id="content" class="form-input" name="content" readonly="readonly"></textarea>
     </div>
-    <div class="form-group field-comment">
-        <label for="comment" >Comment</label>
-        <textarea id="comment" placeholder="Optional comment to be pushed with the insight" name="comment"></textarea>
+    <div class="form-group field-tags">
+        <label for="tags" >Tags</label>
+        <input id="tags" class="form-input" placeholder="Comma-separated set of tags to add to the note" name="tags">
     </div>
-    <input type="hidden" name="username" id="username" value="user">
-    <input type="hidden" name="userId" id="userId">
-    <input type="hidden" name="link" id="link">
-    <input type="submit" name="submit" id="submit">
-</form>
+    <input type="hidden" class="form-input" name="userId" id="userId">
+    <input type="hidden" class="form-input" name="link" id="link">
+    <button type="button" name="submit" id="submit" onclick="submitForm()" >Submit</button>
+</div>
 </body>
 </html>
