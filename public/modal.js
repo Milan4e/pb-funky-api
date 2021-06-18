@@ -48,7 +48,7 @@ async function tagWidget(widgetId) {
     try {
         let pbTag = (await miro.board.tags.get()).filter(function(tag) {return tag.title === pbTagName})
         if (!pbTag.length) {
-            pbTag = await miro.board.tags.create({ title: pbTagName })
+            pbTag = await miro.board.tags.create({ title: pbTagName, color: "#2d9bf0" })
         }
         pbTag = pbTag[0]
         const widgetIds = pbTag.widgetIds
