@@ -5,24 +5,25 @@
         <link rel="stylesheet" href="/public/styles.css">
     </head>
     <body>
-    <h2>Install a Miro integration</h2>
+        <h1>
+            <img width="30" src="https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/pslfwcfyxsh2lwmmtkvz">
+            Install Miro integration
+        </h1>
 
-    <p>
-        First you need to authorize Miro application for your Miro team.
-    </p>
+        <p>
+            First you need to authorize Miro application for your Miro team.
+        </p>
 
-    <p>
-        This step requires a Productboard Public API token.
-        To generate it follow steps on our <a href="https://developer.productboard.com/#section/Authentication/Getting-a-token">developer portal</a>
-    </p>
+        <p>
+            This step requires a Productboard Public API token.
+            To generate one follow steps on our <a href="https://developer.productboard.com/#section/Authentication/Getting-a-token" target="_blank">developer portal</a>
+        </p>
 
-    <form id="form" autocomplete="off">
-        <div class="form-group field-title">
-            <textarea type="text" name="token" id="token" class="form-input" placeholder="Productboard public API token" required></textarea><br/>
-        </div>
-        <div class="form-group field-title">
-            <input type="submit" value="Continue">
-        </div>
-    </form>
+        <form id="form" autocomplete="off">
+            <div class="form-group field-title">
+                <textarea type="text" name="token" id="token" class="form-input token" placeholder="Productboard public API token" required class="token"></textarea><br/>
+            </div>
+            <button type="submit" name="submit" id="submit" >Continue</button>
+        </form>
     </body>
 </html>

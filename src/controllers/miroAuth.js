@@ -10,16 +10,32 @@ module.exports = {
       ctx.status = 200
       ctx.body = `
         <html>
-          <head></head>
-          <body>
-            <h2>Install a Miro integration</h2>
+          <head>
+              <link rel="stylesheet" href="/public/styles.css">
+          </head>
+          <body class="auth-page">
+              <h1>
+                  <img width="30" src="https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/pslfwcfyxsh2lwmmtkvz">
+                  Install Miro integration
+              </h1>
 
-            <form action="/oauth/init" method="post">
-              <label for="token">Public API Token:</label><input type="text" name="token" id="token" /><br/>
-              <input type="submit">
-            </form>
+              <p>
+                  First you need to authorize Miro application for your Miro team.
+              </p>
+
+              <p>
+                  This step requires a Productboard Public API token.
+                  To generate one follow steps on our <a href="https://developer.productboard.com/#section/Authentication/Getting-a-token" target="_blank">developer portal</a>
+              </p>
+
+              <form action="/oauth/init" method="post" id="form" autocomplete="off">
+                  <div class="form-group field-title">
+                      <textarea type="text" name="token" id="token" class="form-input token" placeholder="Productboard public API token" required></textarea><br/>
+                  </div>
+                  <button type="submit" name="submit" id="submit" >Continue</button>
+              </form>
           </body>
-        </html>
+      </html>
       `
     }
   ]),

@@ -19,9 +19,17 @@ input,textarea {
 }
 
 textarea {
-    height: 5em;
+    height: 6em;
 }
 
 #content {
     background-color: #dcdcdc;
+}
+
+.token {
+    height: 10em;
+}
+
+.auth-page {
+    width: 500px;
 }

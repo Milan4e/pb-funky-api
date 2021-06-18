@@ -65,7 +65,7 @@ async function openModal() {
     const isAuthorized = await miro.isAuthorized()
 
     if (!isAuthorized) {
-        const token = await miro.board.ui.openModal("/public/auth.html", { width: 400, height: 375 })
+        const token = await miro.board.ui.openModal("/public/auth.html", { width: 450, height: 375 })
 
         if (token) {
             await miro.requestAuthorization({
